@@ -5,7 +5,7 @@
 # project variables
 ######################################
 # target name
-TARGET = APP
+TARGET = app
 # optimalization
 OPT = -O0
 # build dir

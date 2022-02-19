@@ -4,12 +4,11 @@
 
 _start:
         // set stack pointer
-        lui sp, %hi(_estack)
-        addi sp,sp, %lo(_estack)
-        // run main function
-        jal  ra, main
-        j _exit
+        lui     sp, %hi(_estack)     // load high 20b into SP
+        addi    sp,sp, %lo(_estack)  // add low 12b into SP
 
+        // run main function
+        jal     ra, main
 _exit:
-        // super loop
-        j _exit
+        // program loop
+        j       _exit

@@ -21,7 +21,7 @@ C_SOURCES = $(wildcard app/src/*.c)
 C_SOURCES += $(wildcard drivers/src/*.c)
 
 # ASM sources
-ASM_SOURCES = startup.s
+ASM_SOURCES = startup.S
 
 
 #######################################
@@ -48,8 +48,7 @@ SIMULATOR = ../cpu-cpp-emulator/sw/build/cpu-emulator
 #######################################
 # compile gcc flags
 ARCH = -march=rv32i
-#SPEC = --specs=nosys.specs
-SPEC = -nostartfiles
+SPEC = -nostartfiles --specs=nosys.specs
 AFLAGS = $(ARCH) $(SPEC) -Wall $(INC)
 CFLAGS = $(ARCH) $(SPEC) -Wall -std=c99 $(INC) $(OPT) -fdata-sections -ffunction-sections
 
@@ -63,8 +62,8 @@ CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)"
 OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(C_SOURCES:.c=.o)))
 vpath %.c $(sort $(dir $(C_SOURCES)))
 # add ASM to objects
-OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES:.s=.o)))
-vpath %.s $(sort $(dir $(ASM_SOURCES)))
+OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES:.S=.o)))
+vpath %.S $(sort $(dir $(ASM_SOURCES)))
 
 # default action: build all
 all: clean $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).lss $(BUILD_DIR)/$(TARGET).bin size
@@ -73,7 +72,7 @@ all: clean $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).lss $(BUILD_DIR)/$(
 $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
 	@$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
 # create object files from ASM files
-$(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
+$(BUILD_DIR)/%.o: %.S Makefile | $(BUILD_DIR)
 	@$(AS) -c $(AFLAGS) $< -o $@
 # create aplication ELF file
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile

@@ -51,7 +51,7 @@ ARCH = -march=rv32i
 #SPEC = --specs=nosys.specs
 SPEC = -nostartfiles
 AFLAGS = $(ARCH) $(SPEC) -Wall $(INC)
-CFLAGS = $(ARCH) $(SPEC) -Wall -std=c99 $(INC) $(OPT)
+CFLAGS = $(ARCH) $(SPEC) -Wall -std=c99 $(INC) $(OPT) -fdata-sections -ffunction-sections
 
 LDSCRIPT = linker_script.ld
 LDFLAGS = $(ARCH) $(SPEC) -Wl,--gc-sections -Wl,-Map=$(BUILD_DIR)/$(TARGET).map -Wl,--cref -T$(LDSCRIPT)

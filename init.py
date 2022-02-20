@@ -36,8 +36,6 @@ _init:'''
 
     asm += '\n        ret\n'
 
-    print(asm)
-
     with open(path, 'w') as fw:
         fw.writelines(asm)
 

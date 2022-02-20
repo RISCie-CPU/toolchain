@@ -7,18 +7,9 @@
 def load_data_from_bin(path: str) -> tuple:
     with open(path, 'rb') as fr:
         return tuple(
-            int.from_bytes(bytes(data), 'big')
+            int.from_bytes(bytes(data), 'little')
             for data in zip(*(iter(fr.read()),) * 4)
         )
-
-
-def swap32(word: int) -> int:
-    return (
-        ((word << 24) & 0xFF000000) |
-        ((word << 8) & 0x00FF0000) |
-        ((word >> 8) & 0x0000FF00) |
-        ((word >> 24) & 0x000000FF)
-    )
 
 
 def generate_init_asm(path: str, data: tuple) -> None:
@@ -29,10 +20,11 @@ def generate_init_asm(path: str, data: tuple) -> None:
 
 _init:'''
 
-    for address, value in enumerate(data):
+    for i, value in enumerate(data):
+        address = i * 4
         asm += f'''
-        li      t0,0x{swap32(address * 4):08x}
-        li      t1,0x{swap32(value):08x}
+        li      t0,0x{address:08x}
+        li      t1,0x{value:08x}
         sw      t1,0(t0)'''
 
     asm += '\n        ret\n'

@@ -85,7 +85,7 @@ $(BUILD_DIR)/init.o: $(BUILD_DIR)/init.S Makefile | $(BUILD_DIR)
 	@$(AS) -c $(AFLAGS) $< -o $@
 # create init asm
 init: $(BUILD_DIR)/data.bin
-	./init.py
+	@./init.py
 # create aplication ELF file
 $(BUILD_DIR)/tmp.elf: $(OBJECTS) Makefile
 	@$(CC) $(OBJECTS) $(LDFLAGS) -o $@

@@ -21,7 +21,8 @@ C_SOURCES = $(wildcard app/src/*.c)
 C_SOURCES += $(wildcard drivers/src/*.c)
 
 # ASM sources
-ASM_SOURCES = startup.S
+ASM_SOURCES = \
+startup.S
 
 
 #######################################
@@ -66,8 +67,14 @@ OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES:.S=.o)))
 vpath %.S $(sort $(dir $(ASM_SOURCES)))
 
 # default action: build all
-all: clean $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).lss $(BUILD_DIR)/$(TARGET).bin size
-#all: clean $(BUILD_DIR)/$(TARGET).elf size
+all:                       \
+$(BUILD_DIR)/$(TARGET).elf \
+$(BUILD_DIR)/$(TARGET).lss \
+$(BUILD_DIR)/$(TARGET).bin \
+$(BUILD_DIR)/data.bin      \
+size
+
+
 # create object files from C files
 $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
 	@$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
@@ -77,9 +84,12 @@ $(BUILD_DIR)/%.o: %.S Makefile | $(BUILD_DIR)
 # create aplication ELF file
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
 	@$(CC) $(OBJECTS) $(LDFLAGS) -o $@
-# create bin file
-$(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
-	@$(BIN) $< $@
+# create bin program file
+$(BUILD_DIR)/$(TARGET).bin: $(BUILD_DIR)/$(TARGET).elf | $(BUILD_DIR)
+	@$(BIN) --only-section .text $< $@
+# create bin data file for RAM initialization
+$(BUILD_DIR)/data.bin: $(BUILD_DIR)/$(TARGET).elf | $(BUILD_DIR)
+	@$(BIN) --only-section .data $< $@
 # disassembly EFL
 $(BUILD_DIR)/$(TARGET).lss: $(BUILD_DIR)/$(TARGET).elf
 	@$(DP) -h -S $< > $@

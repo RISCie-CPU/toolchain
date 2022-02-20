@@ -1,13 +1,10 @@
 #include "riscie.h"
 
+uint32_t glob_address = 0x900;
+
 int main(void)
 {
-    uint8_t address = 0;
-    uint8_t data    = 0xFF;
-    while (1)
-    {
-        vram_write_8b(address, data);
-        if (address++ == 0xFF)
-            data = ~data;
-    }
+    uint32_t address = glob_address;
+    uint8_t data     = 0xFF;
+    vram_write_8b(address, data);
 }

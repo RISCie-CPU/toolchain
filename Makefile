@@ -64,7 +64,7 @@ OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(C_SOURCES:.c=.o)))
 vpath %.c $(sort $(dir $(C_SOURCES)))
 # add ASM to objects
 OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES:.S=.o)))
-vpath %.S $(sort $(dir $(ASM_SOURCES)))
+vpath %.S $(sort $(dir $(ASM_SOURCES) $(BUILD_DIR)))
 
 # default action: build all
 all:                       \
@@ -81,14 +81,21 @@ $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
 # create object files from ASM files
 $(BUILD_DIR)/%.o: %.S Makefile | $(BUILD_DIR)
 	@$(AS) -c $(AFLAGS) $< -o $@
+$(BUILD_DIR)/init.o: $(BUILD_DIR)/init.S Makefile | $(BUILD_DIR)
+	@$(AS) -c $(AFLAGS) $< -o $@
+# create init asm
+init: $(BUILD_DIR)/data.bin
+	./init.py
 # create aplication ELF file
-$(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
+$(BUILD_DIR)/tmp.elf: $(OBJECTS) Makefile
 	@$(CC) $(OBJECTS) $(LDFLAGS) -o $@
+$(BUILD_DIR)/$(TARGET).elf: init $(OBJECTS) $(BUILD_DIR)/init.o Makefile
+	@$(CC) $(OBJECTS) $(BUILD_DIR)/init.o $(LDFLAGS) -o $@
 # create bin program file
 $(BUILD_DIR)/$(TARGET).bin: $(BUILD_DIR)/$(TARGET).elf | $(BUILD_DIR)
 	@$(BIN) --only-section .text $< $@
 # create bin data file for RAM initialization
-$(BUILD_DIR)/data.bin: $(BUILD_DIR)/$(TARGET).elf | $(BUILD_DIR)
+$(BUILD_DIR)/data.bin: $(BUILD_DIR)/tmp.elf | $(BUILD_DIR)
 	@$(BIN) --only-section .data $< $@
 # disassembly EFL
 $(BUILD_DIR)/$(TARGET).lss: $(BUILD_DIR)/$(TARGET).elf

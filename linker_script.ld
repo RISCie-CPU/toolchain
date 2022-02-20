@@ -22,6 +22,7 @@ SECTIONS
     {
         . = ALIGN(4);
         *(.text.prologue)
+        *(.text.init)
         *(.text)           /* .text sections (code) */
         *(.text*)          /* .text* sections (code) */
         . = ALIGN(4);

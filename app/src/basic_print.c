@@ -56,12 +56,12 @@ void basic_print(char *str)
 
             uint8_t char_line = ASCII[(uint8_t) str[i]][y];
 
-            address = (0 + (cursor.x * CHAR_X_SIZE)) + ((y + (cursor.y * CHAR_Y_SIZE)) * SCREEN_PX_WIDTH);
+            address = (cursor.x * CHAR_X_SIZE) + ((y + (cursor.y * CHAR_Y_SIZE)) * SCREEN_PX_WIDTH);
             value   = CODE_4B_TO_32B[char_line & 0x0F];
             vram_write_32b(address, value);
 
-            address = (4 + (cursor.x * CHAR_X_SIZE)) + ((y + (cursor.y * CHAR_Y_SIZE)) * SCREEN_PX_WIDTH);
-            value   = CODE_4B_TO_32B[char_line >> 4];
+            address += 4;
+            value    = CODE_4B_TO_32B[char_line >> 4];
             vram_write_32b(address, value);
         }
 

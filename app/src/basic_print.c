@@ -24,6 +24,11 @@ void basic_print(char *str)
             }
             continue;
         }
+        else if (str[i] == '\r')
+        {
+            cursor.x = 0;
+            continue;
+        }
 
         for (int32_t y = 0; y < CHAR_Y_SIZE; y++)
         {

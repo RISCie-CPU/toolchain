@@ -15,14 +15,22 @@ void basic_print(char *str)
 {
     for (uint32_t i = 0; str[i]; i++)
     {
+        if (str[i] == '\n')
+        {
+            cursor.x = 0;
+            if (++cursor.y > SCREEN_CHAR_HEIGHT)
+            {
+                cursor.y = 0;
+            }
+            continue;
+        }
+
         for (int32_t y = 0; y < CHAR_Y_SIZE; y++)
         {
             for (int32_t x = 0; x < CHAR_X_SIZE; x++)
             {
-                uint32_t address =                                            \
-                  (x + (cursor.x * CHAR_X_SIZE))                              \
-                  + ((y + (cursor.y * CHAR_Y_SIZE)) * SCREEN_PX_WIDTH);
-                uint8_t value = (
+                uint32_t address = (x + (cursor.x * CHAR_X_SIZE)) + ((y + (cursor.y * CHAR_Y_SIZE)) * SCREEN_PX_WIDTH);
+                uint8_t value    = (
                     ASCII[(uint8_t) str[i]][y] & (1 << x)
                   ) ? 0xFF : 0x00;
                 vram_write_8b(address, value);
@@ -37,4 +45,4 @@ void basic_print(char *str)
             }
         }
     }
-}
+} /* basic_print */

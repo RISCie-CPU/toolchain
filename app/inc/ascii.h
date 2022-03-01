@@ -5,4 +5,4 @@
 #define CHAR_X_SIZE 8
 #define CHAR_Y_SIZE 10
 
-const uint8_t ASCII[128][CHAR_Y_SIZE];
+extern const uint8_t ASCII[128][CHAR_Y_SIZE];

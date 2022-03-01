@@ -21,7 +21,7 @@ SECTIONS
     .text :
     {
         . = ALIGN(4);
-        *(.text.prologue)
+        *(.text.start)
         *(.text.init)
         *(.text)           /* .text sections (code) */
         *(.text*)          /* .text* sections (code) */
@@ -36,18 +36,16 @@ SECTIONS
         *(.rodata)         /* .rodata sections (constants, strings, etc.) */
         *(.rodata*)        /* .rodata* sections (constants, strings, etc.) */
         . = ALIGN(4);
-    } >FLASH
+    } >RAM AT> FLASH
 
     /* Initialized data sections goes into RAM, load LMA copy after code */
     .data :
     {
         . = ALIGN(4);
-        _sdata = .;        /* create a global symbol at data start */
         *(.data)           /* .data sections */
         *(.data*)          /* .data* sections */
-        *(.*data*)          /* .data* sections */
+        *(.*data*)         /* .data* sections */
         . = ALIGN(4);
-        _edata = .;        /* define a global symbol at data end */
     } >RAM AT> FLASH
 
     /* Uninitialized data section */
@@ -55,13 +53,11 @@ SECTIONS
     {
         /* This is used by the startup in order to initialize the .bss secion */
         _sbss = .;         /* define a global symbol at bss start */
-        __bss_start__ = _sbss;
         *(.bss)
         *(.bss*)
         *(COMMON)
         . = ALIGN(4);
         _ebss = .;         /* define a global symbol at bss end */
-        __bss_end__ = _ebss;
     } >RAM
 
     /* User_heap_stack section, used to check that there is enough RAM left */

@@ -1,6 +1,6 @@
 .global _start
 .word _estack
-.section .text.prologue, "ax"
+.section .text.start, "ax"
 
 _start:
         // set stack pointer

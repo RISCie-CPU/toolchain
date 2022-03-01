@@ -35,5 +35,6 @@ _init:'''
 
 if __name__ == '__main__':
 
+    rodata = load_data_from_bin('build/rodata.bin')
     data = load_data_from_bin('build/data.bin')
-    generate_init_asm('build/init.S', data)
+    generate_init_asm('build/init.S', rodata + data)

@@ -71,9 +71,7 @@ all:                       \
 $(BUILD_DIR)/$(TARGET).elf \
 $(BUILD_DIR)/$(TARGET).lss \
 $(BUILD_DIR)/$(TARGET).bin \
-$(BUILD_DIR)/data.bin      \
 size
-
 
 # create object files from C files
 $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
@@ -84,7 +82,7 @@ $(BUILD_DIR)/%.o: %.S Makefile | $(BUILD_DIR)
 $(BUILD_DIR)/init.o: $(BUILD_DIR)/init.S Makefile | $(BUILD_DIR)
 	@$(AS) -c $(AFLAGS) $< -o $@
 # create init asm
-init: $(BUILD_DIR)/data.bin
+init: $(BUILD_DIR)/rodata.bin $(BUILD_DIR)/data.bin
 	@./init.py
 # create aplication ELF file
 $(BUILD_DIR)/tmp.elf: $(OBJECTS) Makefile
@@ -95,6 +93,8 @@ $(BUILD_DIR)/$(TARGET).elf: init $(OBJECTS) $(BUILD_DIR)/init.o Makefile
 $(BUILD_DIR)/$(TARGET).bin: $(BUILD_DIR)/$(TARGET).elf | $(BUILD_DIR)
 	@$(BIN) --only-section .text $< $@
 # create bin data file for RAM initialization
+$(BUILD_DIR)/rodata.bin: $(BUILD_DIR)/tmp.elf | $(BUILD_DIR)
+	@$(BIN) --only-section .rodata $< $@
 $(BUILD_DIR)/data.bin: $(BUILD_DIR)/tmp.elf | $(BUILD_DIR)
 	@$(BIN) --only-section .data $< $@
 # disassembly EFL

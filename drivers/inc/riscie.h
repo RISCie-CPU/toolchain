@@ -31,8 +31,8 @@ typedef struct {
 
 #define VRAM_BASE_ADDRESS 0x40000000
 
-#define vram_write_8b(ADDR, DATA_UINT8)   (*((uint8_t *) (VRAM_BASE_ADDRESS + ADDR)) = DATA_UINT8)
-#define vram_write_32b(ADDR, DATA_UINT32) (*((uint32_t *) (VRAM_BASE_ADDRESS + ADDR)) = DATA_UINT32)
+#define vram_write_8b(ADDR, DATA_UINT8)   (*((uint8_t *) (VRAM_BASE_ADDRESS + ADDR)) = (uint8_t) DATA_UINT8)
+#define vram_write_32b(ADDR, DATA_UINT32) (*((uint32_t *) (VRAM_BASE_ADDRESS + ADDR)) = (uint32_t) DATA_UINT32)
 
 /******************************************************************************
  * VGA

@@ -31,8 +31,8 @@ typedef struct {
 
 #define VRAM_BASE_ADDRESS 0x40000000
 
-void vram_write_8b(uint32_t addr, const uint8_t data);
-void vram_write_32b(uint32_t addr, const uint32_t data);
+#define vram_write_8b(ADDR, DATA_UINT8)   (*((uint8_t *) (VRAM_BASE_ADDRESS + ADDR)) = DATA_UINT8)
+#define vram_write_32b(ADDR, DATA_UINT32) (*((uint32_t *) (VRAM_BASE_ADDRESS + ADDR)) = DATA_UINT32)
 
 /******************************************************************************
  * VGA
@@ -44,4 +44,3 @@ void vga_power(const uint8_t state);
 /******************************************************************************
  * OTHER
  *****************************************************************************/
-

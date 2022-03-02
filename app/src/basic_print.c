@@ -3,7 +3,7 @@
 struct {
     uint32_t x;
     uint32_t y;
-} static volatile cursor;
+} static volatile cursor = { .x = 0, .y = 0 };
 
 void set_cursor(uint32_t x, uint32_t y)
 {

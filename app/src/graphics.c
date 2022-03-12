@@ -1,6 +1,6 @@
 #include "graphics.h"
 
-void draw_line_DDA(int x1, int y1, int x2, int y2, uint8_t color)
+void draw_line_dda(int x1, int y1, int x2, int y2, uint8_t color)
 {
     if (x1 == x2 && y1 == y2)
     {
@@ -63,7 +63,7 @@ void set_pixel(int x, int y, uint8_t color)
     vram_write_8b(x + (512 * y), color);
 }
 
-void draw_circle_MP(int x, int y, int radius, uint8_t color)
+void draw_circle_mp(int x, int y, int radius, uint8_t color)
 {
     int local_x = radius;
     int local_y = 0;

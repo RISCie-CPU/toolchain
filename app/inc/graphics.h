@@ -6,5 +6,5 @@
 #define FRAC_BITS 8
 
 void set_pixel(int x, int y, uint8_t color);
-void draw_line_DDA(int x1, int y1, int x2, int y2, uint8_t color);
-void draw_circle_MP(int x, int y, int radius, uint8_t color);
+void draw_line_dda(int x1, int y1, int x2, int y2, uint8_t color);
+void draw_circle_mp(int x, int y, int radius, uint8_t color);

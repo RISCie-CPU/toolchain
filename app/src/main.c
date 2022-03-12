@@ -8,18 +8,18 @@ int main(void)
     int x_center = 160;
     int y_center = 120;
 
-    draw_line_DDA(x_center, y_center, x_center + 100, y_center, 0xFF);
-    draw_line_DDA(x_center, y_center, x_center + 100, y_center + 100, 0xFF);
-    draw_line_DDA(x_center, y_center, x_center + 100, y_center - 100, 0xFF);
+    draw_line_dda(x_center, y_center, x_center + 100, y_center, 0xFF);
+    draw_line_dda(x_center, y_center, x_center + 100, y_center + 100, 0xFF);
+    draw_line_dda(x_center, y_center, x_center + 100, y_center - 100, 0xFF);
 
-    draw_line_DDA(x_center, y_center, x_center - 100, y_center, 0xFF);
-    draw_line_DDA(x_center, y_center, x_center - 100, y_center - 100, 0xFF);
-    draw_line_DDA(x_center, y_center, x_center - 100, y_center + 100, 0xFF);
+    draw_line_dda(x_center, y_center, x_center - 100, y_center, 0xFF);
+    draw_line_dda(x_center, y_center, x_center - 100, y_center - 100, 0xFF);
+    draw_line_dda(x_center, y_center, x_center - 100, y_center + 100, 0xFF);
 
-    draw_line_DDA(x_center, y_center, x_center, y_center + 100, 0xFF);
-    draw_line_DDA(x_center, y_center, x_center, y_center - 100, 0xFF);
+    draw_line_dda(x_center, y_center, x_center, y_center + 100, 0xFF);
+    draw_line_dda(x_center, y_center, x_center, y_center - 100, 0xFF);
 
-    draw_circle_MP(x_center, y_center, 100, 0xFF);
+    draw_circle_mp(x_center, y_center, 100, 0xFF);
 
     while (1)
         ;

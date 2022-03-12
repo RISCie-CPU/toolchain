@@ -1,4 +1,4 @@
-#include "graphics.h"
+#include "riscie_graphics.h"
 
 void draw_line_dda(int x1, int y1, int x2, int y2, uint8_t color)
 {

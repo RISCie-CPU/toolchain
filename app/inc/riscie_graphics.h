@@ -1,7 +1,7 @@
 #pragma once
 
 #include "riscie.h"
-#include "math.h"
+#include "riscie_math.h"
 
 #define FRAC_BITS 8
 

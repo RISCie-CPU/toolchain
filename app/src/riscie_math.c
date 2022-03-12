@@ -1,4 +1,4 @@
-#include "math.h"
+#include "riscie_math.h"
 
 int abs(int number)
 {

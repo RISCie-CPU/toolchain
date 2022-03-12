@@ -1,7 +1,7 @@
 #include "riscie.h"
 #include "basic_print.h"
-#include "graphics.h"
-#include "math.h"
+#include "riscie_graphics.h"
+#include "riscie_math.h"
 
 int main(void)
 {

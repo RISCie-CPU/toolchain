@@ -5,7 +5,6 @@
 
 int main(void)
 {
-
     int x_center = 160;
     int y_center = 120;
 
@@ -23,6 +22,5 @@ int main(void)
     draw_circle_MP(x_center, y_center, 100, 0xFF);
 
     while (1)
-    {
-    }
+        ;
 }

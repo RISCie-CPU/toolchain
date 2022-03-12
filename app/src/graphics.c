@@ -16,12 +16,12 @@ void draw_line_DDA(int x1, int y1, int x2, int y2, uint8_t color)
     if (abs(dy) > abs(dx))
     {
         tmp = x1;
-        x1 = y1;
-        y1 = tmp;
+        x1  = y1;
+        y1  = tmp;
 
         tmp = x2;
-        x2 = y2;
-        y2 = tmp;
+        x2  = y2;
+        y2  = tmp;
 
         dx = x2 - x1;
         dy = y2 - y1;
@@ -32,12 +32,12 @@ void draw_line_DDA(int x1, int y1, int x2, int y2, uint8_t color)
     if (x1 > x2)
     {
         tmp = x2;
-        x2 = x1;
-        x1 = tmp;
+        x2  = x1;
+        x1  = tmp;
 
         tmp = y2;
-        y2 = y1;
-        y1 = tmp;
+        y2  = y1;
+        y1  = tmp;
     }
 
     int y = y1 << FRAC_BITS;
@@ -56,7 +56,7 @@ void draw_line_DDA(int x1, int y1, int x2, int y2, uint8_t color)
         }
         y += k;
     }
-}
+} /* draw_line_DDA */
 
 void set_pixel(int x, int y, uint8_t color)
 {
@@ -68,7 +68,7 @@ void draw_circle_MP(int x, int y, int radius, uint8_t color)
     int local_x = radius;
     int local_y = 0;
 
-    int P = 1 - radius;
+    int P  = 1 - radius;
     int X2 = 2 - 2 * radius;
     int Y2 = 3;
 
@@ -86,15 +86,15 @@ void draw_circle_MP(int x, int y, int radius, uint8_t color)
 
         if (P >= local_y)
         {
-            P += X2;
+            P  += X2;
             X2 += 2;
             --local_x;
         }
 
-        P += Y2;
+        P  += Y2;
         Y2 += 2;
         ++local_y;
     }
-    
+
     //     put8PixelsOfCircle(x, y, s1, s2, color);
-}
+} /* draw_circle_MP */

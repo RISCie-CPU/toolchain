@@ -32,23 +32,30 @@ Matrix_3x1 *matrix_multiply_3x1(Matrix_3x3 *m1, Matrix_3x1 *m2)
 void draw_object_2D(Point *vertices, int verices_size, Matrix_3x3 *matrix)
 {
     // Point current_point = vertices[0];
-    Point current_point = {0, 0, INT2FIXED(1)};
+    Point current_point = vertices[0];
     Point next_point;
-    __asm__("nop");
+
+    // __asm__("nop");
     
-    // Když odeberu tuto matici, která se nikde nevolá, tak to "funguje"
+    // // Když odeberu tuto matici, která se nikde nevolá, tak to "funguje"
     // Matrix_3x3 TADY = {{1, 0, 30},
     //                    {0, 1, 30},
     //                    {0, 0, 1}};
-    __asm__("nop");
-    __asm__("nop");
+    // __asm__("nop");
+    // __asm__("nop");
 
-    Matrix_3x1 *mult = matrix_multiply_3x1(matrix, &current_point);
-    current_point.x = (*mult)[0][0];
-    current_point.y = (*mult)[1][0];
-    free(mult);
+    // Matrix_3x1 *mult = matrix_multiply_3x1(matrix, &current_point);
+    // current_point.x = (*mult)[0][0];
+    // current_point.y = (*mult)[1][0];
+    // free(mult);
 
-    for (int vertex = 0; vertex < 3; vertex++)
+    // Matrix_3x1 point_2 = {{INT2FIXED(10)}, {INT2FIXED(10)}, {INT2FIXED(1)}};
+    // Matrix_3x1 *out_2 = matrix_multiply_3x1(matrix, &point_2);
+    // // current_point.x = (*out_2)[0][0];
+    // // current_point.y = (*out_2)[1][0];
+    // free(out_2);
+
+    for (int vertex = 0; vertex < verices_size - 1; vertex++)
     {
         next_point = vertices[vertex + 1];
         draw_line(current_point, next_point, 255);

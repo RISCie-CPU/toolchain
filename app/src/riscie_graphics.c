@@ -8,6 +8,14 @@ void *matrix_multiply_3x1(Matrix_3x1 *out, Matrix_3x3 *m1, Matrix_3x1 *m2)
     (*out)[2][0] = ((*m1)[2][0] * (*m2)[0][0] + (*m1)[2][1] * (*m2)[1][0] + (*m1)[2][2] * (*m2)[2][0]) >> FIXED_BITS;
 }
 
+void *matrix_multiply_4x1(Matrix_4x1 *out, Matrix_4x4 *m1, Matrix_4x1 *m2)
+{
+    (*out)[0][0] = ((*m1)[0][0] * (*m2)[0][0] + (*m1)[0][1] * (*m2)[1][0] + (*m1)[0][2] * (*m2)[2][0] + (*m1)[0][3] * (*m2)[3][0]) >> FIXED_BITS;
+    (*out)[1][0] = ((*m1)[1][0] * (*m2)[0][0] + (*m1)[1][1] * (*m2)[1][0] + (*m1)[1][2] * (*m2)[2][0] + (*m1)[1][3] * (*m2)[3][0]) >> FIXED_BITS;
+    (*out)[2][0] = ((*m1)[2][0] * (*m2)[0][0] + (*m1)[2][1] * (*m2)[1][0] + (*m1)[2][2] * (*m2)[2][0] + (*m1)[2][3] * (*m2)[3][0]) >> FIXED_BITS;
+    (*out)[3][0] = ((*m1)[3][0] * (*m2)[0][0] + (*m1)[3][1] * (*m2)[1][0] + (*m1)[3][2] * (*m2)[2][0] + (*m1)[3][3] * (*m2)[3][0]) >> FIXED_BITS;
+}
+
 void draw_object_2D(Point *vertices, int verices_size, Matrix_3x3 *matrix, uint8_t color)
 {
     Point current_point = vertices[0];
@@ -33,6 +41,36 @@ void draw_object_2D(Point *vertices, int verices_size, Matrix_3x3 *matrix, uint8
 
         current_point = next_point;
     }
+}
+
+void draw_object_3D(vec4 *vertices, int verices_size, Matrix_4x4 *matrix, uint8_t color)
+{
+    vec4 current_point = vertices[0];
+    vec4 next_point;
+
+    Matrix_4x1 f_point;
+    matrix_multiply_4x1(&f_point, matrix, &current_point);
+    current_point.x = f_point[0][0];
+    current_point.y = f_point[1][0];
+    current_point.z = f_point[2][0];
+
+    for (int vertex = 0; vertex < verices_size - 1; vertex++)
+    {
+        next_point = vertices[vertex + 1];
+        
+        Matrix_4x1 n_point;
+        matrix_multiply_4x1(&n_point, matrix, &next_point);
+        next_point.x = n_point[0][0];
+        next_point.y = n_point[1][0];
+        next_point.z = n_point[2][0];
+        
+        Point p1 = {current_point.x, current_point.y, 1};
+        Point p2 = {next_point.x, next_point.y, 1};
+        draw_line(p1, p2, color);
+
+        current_point = next_point;
+    }
+
 }
 
 void draw_line_dda(int x1, int y1, int x2, int y2, uint8_t color)

@@ -1,64 +1,35 @@
 #include <stdlib.h>
 #include "riscie_graphics.h"
 
-Matrix_1x3 *matrix_multiply_1x3(Matrix_1x3 *m1, Matrix_3x3 *m2)
+void *matrix_multiply_3x1(Matrix_3x1 *out, Matrix_3x3 *m1, Matrix_3x1 *m2)
 {
-    Matrix_1x3 *out = (Matrix_1x3 *)malloc(sizeof(Matrix_1x3));
-
-    // u = u*0 + v*3 + w*6
     (*out)[0][0] = ((*m1)[0][0] * (*m2)[0][0] + (*m1)[0][1] * (*m2)[1][0] + (*m1)[0][2] * (*m2)[2][0]) >> FIXED_BITS;
-    // v = u*1 + v*4 + w*7
-    (*out)[0][1] = ((*m1)[0][0] * (*m2)[0][1] + (*m1)[0][1] * (*m2)[1][1] + (*m1)[0][2] * (*m2)[2][1]) >> FIXED_BITS;
-    // w = u*2 + v*5 + w*8
-    (*out)[0][2] = ((*m1)[0][0] * (*m2)[0][2] + (*m1)[0][1] * (*m2)[1][2] + (*m1)[0][2] * (*m2)[2][2]) >> FIXED_BITS;
-
-    return out;
-}
-
-Matrix_3x1 *matrix_multiply_3x1(Matrix_3x3 *m1, Matrix_3x1 *m2)
-{
-    Matrix_3x1 *out = (Matrix_3x1 *)malloc(sizeof(Matrix_3x1));
-
-    // u = u*0 + v*3 + w*6
-    (*out)[0][0] = ((*m1)[0][0] * (*m2)[0][0] + (*m1)[0][1] * (*m2)[1][0] + (*m1)[0][2] * (*m2)[2][0]) >> FIXED_BITS;
-    // v = u*1 + v*4 + w*7
     (*out)[1][0] = ((*m1)[1][0] * (*m2)[0][0] + (*m1)[1][1] * (*m2)[1][0] + (*m1)[1][2] * (*m2)[2][0]) >> FIXED_BITS;
-    // w = u*2 + v*5 + w*8
     (*out)[2][0] = ((*m1)[2][0] * (*m2)[0][0] + (*m1)[2][1] * (*m2)[1][0] + (*m1)[2][2] * (*m2)[2][0]) >> FIXED_BITS;
-
-    return out;
 }
 
-void draw_object_2D(Point *vertices, int verices_size, Matrix_3x3 *matrix)
+void draw_object_2D(Point *vertices, int verices_size, Matrix_3x3 *matrix, uint8_t color)
 {
-    // Point current_point = vertices[0];
     Point current_point = vertices[0];
     Point next_point;
-
-    // __asm__("nop");
     
-    // // Když odeberu tuto matici, která se nikde nevolá, tak to "funguje"
-    // Matrix_3x3 TADY = {{1, 0, 30},
-    //                    {0, 1, 30},
-    //                    {0, 0, 1}};
-    // __asm__("nop");
-    // __asm__("nop");
+    Matrix_3x1 f_point;
+    matrix_multiply_3x1(&f_point, matrix, &current_point);
+    current_point.x = f_point[0][0];
+    current_point.y = f_point[1][0];
 
-    // Matrix_3x1 *mult = matrix_multiply_3x1(matrix, &current_point);
-    // current_point.x = (*mult)[0][0];
-    // current_point.y = (*mult)[1][0];
-    // free(mult);
-
-    // Matrix_3x1 point_2 = {{INT2FIXED(10)}, {INT2FIXED(10)}, {INT2FIXED(1)}};
-    // Matrix_3x1 *out_2 = matrix_multiply_3x1(matrix, &point_2);
-    // // current_point.x = (*out_2)[0][0];
-    // // current_point.y = (*out_2)[1][0];
-    // free(out_2);
 
     for (int vertex = 0; vertex < verices_size - 1; vertex++)
     {
+
         next_point = vertices[vertex + 1];
-        draw_line(current_point, next_point, 255);
+        
+        Matrix_3x1 n_point;
+        matrix_multiply_3x1(&n_point, matrix, &next_point);
+        next_point.x = n_point[0][0];
+        next_point.y = n_point[1][0];
+        
+        draw_line(current_point, next_point, color);
 
         current_point = next_point;
     }
@@ -165,10 +136,10 @@ void draw_circle_mp(int x, int y, int radius, uint8_t color)
 
 void draw_point(Point p, uint8_t color)
 {
-    set_pixel((p.x >> 5) + X_SCREEN_CENTER, Y_SCREEN_CENTER - (p.y >> 5), color);
+    set_pixel((p.x >> FIXED_BITS) + X_SCREEN_CENTER, Y_SCREEN_CENTER - (p.y >> FIXED_BITS), color);
 }
 
 void draw_line(Point p1, Point p2, uint8_t color)
 {
-    draw_line_dda((p1.x >> 5) + X_SCREEN_CENTER, Y_SCREEN_CENTER - (p1.y >> 5), (p2.x >> 5) + X_SCREEN_CENTER, Y_SCREEN_CENTER - (p2.y >> 5), color);
+    draw_line_dda((p1.x >> FIXED_BITS) + X_SCREEN_CENTER, Y_SCREEN_CENTER - (p1.y >> FIXED_BITS), (p2.x >> FIXED_BITS) + X_SCREEN_CENTER, Y_SCREEN_CENTER - (p2.y >> FIXED_BITS), color);
 }

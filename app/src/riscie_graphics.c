@@ -1,20 +1,32 @@
 #include <stdlib.h>
 #include "riscie_graphics.h"
 
-void *matrix_multiply_3x1(Matrix_3x1 *out, Matrix_3x3 *m1, Matrix_3x1 *m2)
+void matrix_multiply_3x1(Matrix_3x1 *out, Matrix_3x3 *m1, Matrix_3x1 *m2)
 {
     (*out)[0][0] = ((*m1)[0][0] * (*m2)[0][0] + (*m1)[0][1] * (*m2)[1][0] + (*m1)[0][2] * (*m2)[2][0]) >> FIXED_BITS;
     (*out)[1][0] = ((*m1)[1][0] * (*m2)[0][0] + (*m1)[1][1] * (*m2)[1][0] + (*m1)[1][2] * (*m2)[2][0]) >> FIXED_BITS;
     (*out)[2][0] = ((*m1)[2][0] * (*m2)[0][0] + (*m1)[2][1] * (*m2)[1][0] + (*m1)[2][2] * (*m2)[2][0]) >> FIXED_BITS;
 }
 
-void *matrix_multiply_4x1(Matrix_4x1 *out, Matrix_4x4 *m1, Matrix_4x1 *m2)
+void matrix_multiply_4x1(Matrix_4x1 *out, Matrix_4x4 *m1, Matrix_4x1 *m2)
 {
     (*out)[0][0] = ((*m1)[0][0] * (*m2)[0][0] + (*m1)[0][1] * (*m2)[1][0] + (*m1)[0][2] * (*m2)[2][0] + (*m1)[0][3] * (*m2)[3][0]) >> FIXED_BITS;
     (*out)[1][0] = ((*m1)[1][0] * (*m2)[0][0] + (*m1)[1][1] * (*m2)[1][0] + (*m1)[1][2] * (*m2)[2][0] + (*m1)[1][3] * (*m2)[3][0]) >> FIXED_BITS;
     (*out)[2][0] = ((*m1)[2][0] * (*m2)[0][0] + (*m1)[2][1] * (*m2)[1][0] + (*m1)[2][2] * (*m2)[2][0] + (*m1)[2][3] * (*m2)[3][0]) >> FIXED_BITS;
     (*out)[3][0] = ((*m1)[3][0] * (*m2)[0][0] + (*m1)[3][1] * (*m2)[1][0] + (*m1)[3][2] * (*m2)[2][0] + (*m1)[3][3] * (*m2)[3][0]) >> FIXED_BITS;
 }
+
+void matrix_multiply_4x4(Matrix_4x4 *out, Matrix_4x4 *m1, Matrix_4x4 *m2)
+{
+    for (int y = 0; y < 4; y++)
+    {
+        for (int x = 0; x < 4; x++)
+        {
+            (*out)[y][x] = ((*m1)[y][0] * (*m2)[0][x] + (*m1)[y][1] * (*m2)[1][x] + (*m1)[y][2] * (*m2)[2][x]+ (*m1)[y][3] * (*m2)[3][x]) >> FIXED_BITS;
+        }
+    }
+}
+
 
 void draw_object_2D(Point *vertices, int verices_size, Matrix_3x3 *matrix, uint8_t color)
 {
@@ -26,7 +38,7 @@ void draw_object_2D(Point *vertices, int verices_size, Matrix_3x3 *matrix, uint8
     current_point.x = f_point[0][0];
     current_point.y = f_point[1][0];
 
-
+    
     for (int vertex = 0; vertex < verices_size - 1; vertex++)
     {
 
@@ -54,6 +66,7 @@ void draw_object_3D(vec4 *vertices, int verices_size, Matrix_4x4 *matrix, uint8_
     current_point.y = f_point[1][0];
     current_point.z = f_point[2][0];
 
+    int linePass = 4;
     for (int vertex = 0; vertex < verices_size - 1; vertex++)
     {
         next_point = vertices[vertex + 1];
@@ -66,8 +79,16 @@ void draw_object_3D(vec4 *vertices, int verices_size, Matrix_4x4 *matrix, uint8_
         
         Point p1 = {current_point.x, current_point.y, 1};
         Point p2 = {next_point.x, next_point.y, 1};
-        draw_line(p1, p2, color);
 
+        if (linePass == 0 || color == 0)
+        {
+            draw_line(p1, p2, color);
+        }
+        else
+        {
+            draw_line(p1, p2, 0b11100000);
+            linePass--;
+        }
         current_point = next_point;
     }
 

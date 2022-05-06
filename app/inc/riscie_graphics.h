@@ -4,8 +4,14 @@
 #include "riscie_math.h"
 
 #define FRAC_BITS 5
+#define X_SCREEN_WIDTH 320
+#define Y_SCREEN_HEIGHT 240
+
 #define X_SCREEN_CENTER 160
 #define Y_SCREEN_CENTER 120
+
+#define MAX(x, y) (((x) > (y)) ? (x) : (y))
+#define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
 typedef struct{
     int x, y, z;
@@ -37,3 +43,4 @@ void draw_object_2D(Point *vertices, int verices_size, Matrix_3x3 *matrix, uint8
 void draw_object_3D(vec4 *vertices, int verices_size, Matrix_4x4 *matrix, uint8_t color);
 void matrix_multiply_4x1(Matrix_4x1 *out, Matrix_4x4 *m1, Matrix_4x1 *m2);
 void matrix_multiply_4x4(Matrix_4x4 *out, Matrix_4x4 *m1, Matrix_4x4 *m2);
+void pinedaTriangle(Point v1, Point v2, Point v3, int base_color);

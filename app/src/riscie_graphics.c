@@ -94,6 +94,55 @@ void draw_object_3D(vec4 *vertices, int verices_size, Matrix_4x4 *matrix, uint8_
 
 }
 
+void pinedaTriangle(Point v1, Point v2, Point v3, int base_color)
+{
+    int min_y = MIN(MIN(v1.y, v2.y), v3.y);
+    int min_x = MIN(MIN(v1.x, v2.x), v3.x);
+
+    int max_y = MAX(MAX(v1.y, v2.y), v3.y);
+    int max_x = MAX(MAX(v1.x, v2.x), v3.x);
+
+    min_x = MAX(0, min_x);
+    max_x = MIN(X_SCREEN_WIDTH - 1, max_x);
+
+    min_y = MAX(0, min_y);
+    max_y = MIN(Y_SCREEN_HEIGHT - 1, max_y);
+
+    int deltaX1 = v2.x - v1.x;
+    int deltaX2 = v3.x - v2.x;
+    int deltaX3 = v1.x - v3.x;
+
+    int deltaY1 = v2.y - v1.y;
+    int deltaY2 = v3.y - v2.y;
+    int deltaY3 = v1.y - v3.y;
+
+    int edgeF1 = (min_y - v1.y) * deltaX1 - (min_x - v1.x) * deltaY1;
+    int edgeF2 = (min_y - v2.y) * deltaX2 - (min_x - v2.x) * deltaY2;
+    int edgeF3 = (min_y - v3.y) * deltaX3 - (min_x - v3.x) * deltaY3;
+
+
+
+    for (int y = min_y; y <= max_y; y++) {
+        int t1 = edgeF1;
+        int t2 = edgeF2;
+        int t3 = edgeF3;
+        for (int x = min_x; x <= max_x; ++x) {
+            if (t1 >= 0 && t2 >= 0 && t3 >= 0) {
+                set_pixel(x, y, base_color % 255);
+            }
+
+            t1 -= deltaY1;
+        	t2 -= deltaY2;
+            t3 -= deltaY3;
+        }
+        edgeF1 += deltaX1;
+        edgeF2 += deltaX2;
+        edgeF3 += deltaX3;
+
+        base_color++;
+    }
+}
+
 void draw_line_dda(int x1, int y1, int x2, int y2, uint8_t color)
 {
     if (x1 == x2 && y1 == y2)
